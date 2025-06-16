@@ -9,7 +9,7 @@ const crearEncuestaController = async (req, res) => {
  const idEncuesta = uuidv4();
 
   if ( !email || !titulo || !Array.isArray(preguntas) || preguntas.length === 0) {
-    return res.status(400).json({ message: 'Datos incompletos' });
+    return res.status(400).json({ message: 'Datos inválidos' });
   }
 
   const nuevaEncuesta = generarNuevaEncuesta(email, titulo, preguntas,idEncuesta);
