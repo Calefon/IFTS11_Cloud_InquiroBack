@@ -44,6 +44,30 @@ const obtenerEncuestaPorSkRepository = async (pk,sk) => {
         ':pk': pk,    
         ':sk': sk, 
     },
+};
+
+  try {
+    const result = await dynamodb.query(params).promise();
+
+    if (!result.Items || result.Items.length === 0) {
+      throw new Error(`No se encontró ninguna encuesta con la SK: ${sk}`);
+    }
+
+    return result.Items; 
+  } catch (error) {
+    console.log(`No se pudo obtener encuesta por SK ${sk}: ` + error.message)
+    throw new Error(`Error al obtener la encuesta por SK ${sk} : ${error.message}`);
+  }
+};
+
+const obtenerEncuestaPorSkGSIRepository= async (sk) => {
+    const params = {
+        TableName: TABLE_ENCUESTAS,
+        IndexName: "InquiroSK-index",
+        KeyConditionExpression: 'InquiroSK = :sk', 
+        ExpressionAttributeValues: {
+        ':sk': sk, 
+    },
   };
 
   try {
@@ -59,6 +83,7 @@ const obtenerEncuestaPorSkRepository = async (pk,sk) => {
     throw new Error(`Error al obtener la encuesta por SK ${sk} : ${error.message}`);
   }
 };
+
 
 const actualizarEncuestaRepository = async (InquiroPK, InquiroSK, titulo, preguntas) => {
   const params = {
@@ -85,4 +110,4 @@ const actualizarEncuestaRepository = async (InquiroPK, InquiroSK, titulo, pregun
   }
 };
 
-export { crearEncuestaRepository, obtenerEncuestasPorPkRepository, obtenerEncuestaPorSkRepository, actualizarEncuestaRepository };
+export { crearEncuestaRepository, obtenerEncuestasPorPkRepository, obtenerEncuestaPorSkRepository,obtenerEncuestaPorSkGSIRepository, actualizarEncuestaRepository };

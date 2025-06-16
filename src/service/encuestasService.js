@@ -1,4 +1,4 @@
-import { crearEncuestaRepository, obtenerEncuestasPorPkRepository, obtenerEncuestaPorSkRepository, actualizarEncuestaRepository } from '../repository/encuestasRepository.js';
+import { crearEncuestaRepository, obtenerEncuestasPorPkRepository, obtenerEncuestaPorSkRepository, obtenerEncuestaPorSkGSIRepository,actualizarEncuestaRepository } from '../repository/encuestasRepository.js';
 
 const crearEncuestaService = async (encuestaData) => {
   try {
@@ -29,6 +29,16 @@ const obtenerEncuestaPorSkService = async (email,sk) => {
   }
 };
 
+const obtenerEncuestaPorSkGSIService = async (sk) => {
+  try {
+    const encuesta = await obtenerEncuestaPorSkGSIRepository(sk);
+
+    return encuesta;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
 const actualizarEncuestaService = async (InquiroPK, InquiroSK, titulo, preguntas) => {
   try {
     const encuesta = await actualizarEncuestaRepository(InquiroPK, InquiroSK, titulo, preguntas);
@@ -39,4 +49,4 @@ const actualizarEncuestaService = async (InquiroPK, InquiroSK, titulo, preguntas
   }
 };
 
-export { crearEncuestaService, obtenerEncuestasPorPkService, obtenerEncuestaPorSkService, actualizarEncuestaService };
+export { crearEncuestaService, obtenerEncuestasPorPkService, obtenerEncuestaPorSkService,obtenerEncuestaPorSkGSIService, actualizarEncuestaService };

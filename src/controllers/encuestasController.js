@@ -1,4 +1,4 @@
-import { crearEncuestaService, obtenerEncuestasPorPkService, obtenerEncuestaPorSkService, actualizarEncuestaService } from '../service/encuestasService.js';
+import { crearEncuestaService, obtenerEncuestasPorPkService, obtenerEncuestaPorSkService, obtenerEncuestaPorSkGSIService, actualizarEncuestaService } from '../service/encuestasService.js';
 import { v4 as uuidv4 } from "uuid"
 import generarNuevaEncuesta from "../utils/generarNuevaEncuesta.js"
 
@@ -56,6 +56,22 @@ const obtenerEncuestaPorSkController = async (req, res) => {
   }
 };
 
+const obtenerEncuestaPorSkGSIController = async (req, res) => {
+ const { sk } = req.params;
+
+  if ( !sk ) {
+    return res.status(400).json({ message: 'No se ingreso un id valido' });
+  }
+
+  try {
+    const encuesta = await obtenerEncuestaPorSkGSIService(sk);
+
+    res.status(200).json({ encuesta });  
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 const actualizarEncuestaController = async (req, res) => {
  const { InquiroPK, InquiroSK, titulo, preguntas } = req.body;
 
@@ -72,4 +88,4 @@ const actualizarEncuestaController = async (req, res) => {
   }
 };
 
-export { crearEncuestaController, obtenerEncuestasPorPkController, obtenerEncuestaPorSkController, actualizarEncuestaController };
+export { crearEncuestaController, obtenerEncuestasPorPkController, obtenerEncuestaPorSkController, obtenerEncuestaPorSkGSIController,actualizarEncuestaController };
