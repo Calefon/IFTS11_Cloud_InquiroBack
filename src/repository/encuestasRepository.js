@@ -36,6 +36,36 @@ const obtenerEncuestasPorPkRepository = async (pk) => {
   }
 };
 
+const obtenerTodosLosEmailsClienteRepository = async () => {
+    const params = {
+        TableName: TABLE_ENCUESTAS,
+        ProjectionExpression: 'InquiroPK'
+    };
+
+  try {
+    const result = await dynamodb.scan(params).promise();
+    return result.Items; 
+  } catch (error) {
+    console.log("No se pudieron obtener los e-mails: " + error.message)
+    throw new Error(`Error al obtener e-mails: ${error.message}`);
+  }
+};
+
+const obtenerTodasLasEncuestasRepository = async () => {
+    const params = {
+        TableName: TABLE_ENCUESTAS,
+        ProjectionExpression: 'InquiroPK, InquiroSK, preguntas, fechaCreacion, titulo'
+    };
+
+  try {
+    const result = await dynamodb.scan(params).promise();
+    return result.Items; 
+  } catch (error) {
+    console.log("No se pudieron obtener las encuestas: " + error.message)
+    throw new Error(`Error al obtener las encuestas: ${error.message}`);
+  }
+};
+
 const obtenerEncuestaPorSkRepository = async (pk,sk) => {
     const params = {
         TableName: TABLE_ENCUESTAS,
@@ -110,4 +140,4 @@ const actualizarEncuestaRepository = async (InquiroPK, InquiroSK, titulo, pregun
   }
 };
 
-export { crearEncuestaRepository, obtenerEncuestasPorPkRepository, obtenerEncuestaPorSkRepository,obtenerEncuestaPorSkGSIRepository, actualizarEncuestaRepository };
+export { crearEncuestaRepository, obtenerEncuestasPorPkRepository, obtenerTodasLasEncuestasRepository,obtenerEncuestaPorSkRepository,obtenerEncuestaPorSkGSIRepository, actualizarEncuestaRepository, obtenerTodosLosEmailsClienteRepository };

@@ -1,4 +1,4 @@
-import { crearEncuestaService, obtenerEncuestasPorPkService, obtenerEncuestaPorSkService, obtenerEncuestaPorSkGSIService, actualizarEncuestaService } from '../service/encuestasService.js';
+import { crearEncuestaService, obtenerTodosLosEmailsClienteService,obtenerTodasLasEncuestasService,obtenerEncuestasPorPkService, obtenerEncuestaPorSkService, obtenerEncuestaPorSkGSIService, actualizarEncuestaService } from '../service/encuestasService.js';
 import { v4 as uuidv4 } from "uuid"
 import generarNuevaEncuesta from "../utils/generarNuevaEncuesta.js"
 
@@ -17,6 +17,31 @@ const crearEncuestaController = async (req, res) => {
   try {
     const encuestaCreada = await crearEncuestaService(nuevaEncuesta);
     res.status(201).json(encuestaCreada);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+const obtenerTodosLosEmailsClienteController = async (req, res) => {
+
+  try {
+    const emails = await obtenerTodosLosEmailsClienteService();
+    if (emails.length === 0) {
+      return res.status(404).json({ message: 'No se encontraron emails de cliente' });
+    }
+    res.status(200).json({ emails });  
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+const obtenerTodasLasEncuestasController = async (req, res) => {
+  try {
+    const encuestas = await obtenerTodasLasEncuestasService();
+    if (encuestas.length === 0) {
+      return res.status(404).json({ message: 'No se encontraron encuestas.' });
+    }
+    res.status(200).json({ encuestas });  
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -88,4 +113,4 @@ const actualizarEncuestaController = async (req, res) => {
   }
 };
 
-export { crearEncuestaController, obtenerEncuestasPorPkController, obtenerEncuestaPorSkController, obtenerEncuestaPorSkGSIController,actualizarEncuestaController };
+export { crearEncuestaController, obtenerTodosLosEmailsClienteController, obtenerTodasLasEncuestasController,obtenerEncuestasPorPkController, obtenerEncuestaPorSkController, obtenerEncuestaPorSkGSIController,actualizarEncuestaController };

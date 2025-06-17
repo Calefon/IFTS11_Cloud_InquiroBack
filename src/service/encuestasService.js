@@ -1,4 +1,4 @@
-import { crearEncuestaRepository, obtenerEncuestasPorPkRepository, obtenerEncuestaPorSkRepository, obtenerEncuestaPorSkGSIRepository,actualizarEncuestaRepository } from '../repository/encuestasRepository.js';
+import { obtenerTodosLosEmailsClienteRepository, obtenerTodasLasEncuestasRepository,crearEncuestaRepository, obtenerEncuestasPorPkRepository, obtenerEncuestaPorSkRepository, obtenerEncuestaPorSkGSIRepository,actualizarEncuestaRepository } from '../repository/encuestasRepository.js';
 
 const crearEncuestaService = async (encuestaData) => {
   try {
@@ -6,6 +6,28 @@ const crearEncuestaService = async (encuestaData) => {
     return nuevaEncuesta;
   } catch (error) {
     throw new Error("No se pudo crear la encuesta.");
+  }
+};
+
+const obtenerTodosLosEmailsClienteService = async () => {
+  try {
+    const resp = await obtenerTodosLosEmailsClienteRepository();
+    const emails = resp.map( item => item.InquiroPK );
+    const uniqueEmails = [...new Set(emails)];
+    return uniqueEmails;
+  } catch (error) {
+    console.log(error.message)
+    throw new Error("No se pudieron obtener los emails");
+  }
+};
+
+const obtenerTodasLasEncuestasService = async () => {
+  try {
+    const encuestas = await obtenerTodasLasEncuestasRepository();
+    return encuestas;
+  } catch (error) {
+    console.log(error.message)
+    throw new Error("No se pudo obtener las encuestas");
   }
 };
 
@@ -49,4 +71,4 @@ const actualizarEncuestaService = async (InquiroPK, InquiroSK, titulo, preguntas
   }
 };
 
-export { crearEncuestaService, obtenerEncuestasPorPkService, obtenerEncuestaPorSkService,obtenerEncuestaPorSkGSIService, actualizarEncuestaService };
+export { crearEncuestaService, obtenerTodosLosEmailsClienteService,obtenerTodasLasEncuestasService,obtenerEncuestasPorPkService, obtenerEncuestaPorSkService,obtenerEncuestaPorSkGSIService, actualizarEncuestaService };
